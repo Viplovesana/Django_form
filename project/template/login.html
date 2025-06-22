@@ -9,7 +9,7 @@ login page
 <div class="login">    
 <form action="{% url 'logindata' %}" method="POST"  enctype="multipart/form-data" >
       {% csrf_token %}
-
+<div class="logincontainer">
 
 
        {{alert}}
@@ -22,6 +22,7 @@ login page
 <input type="text" name="password"><br><br>
 
  <input type="submit" value="Login">
+ </div>
  </div>
 </form>
 

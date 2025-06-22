@@ -17,18 +17,24 @@ def form(req):
         education=req.POST.getlist('education')
         gender=req.POST.get('gender')
         password=req.POST.get('password')
+        confirmpass=req.POST.get('confirmpass')
         image=req.FILES.get('image')
         file=req.FILES.get('file')
         discription=req.POST.get('discription')
         user = Student.objects.filter(email=email)
         if user:
             eml="Email id already exist"
-
             return render(req,'form.html',{'eml':eml})
         else:
-            Student.objects.create(name=name,email=email,contact=contact,education=education,dob=dob,gender=gender,password=password,image=image,file=file,discription=discription)
-            msg="Data save successfully (:"
-            return render(req,"login.html",{"msg":msg})
+            if confirmpass==password:
+             Student.objects.create(name=name,email=email,contact=contact,education=education,dob=dob,gender=gender,password=password,image=image,file=file,discription=discription,)
+             msg="Data save successfully (:"
+             return render(req,"login.html",{"msg":msg})
+        
+            else:
+                pswd="password not matched!!"
+                return render (req,'form.html',{'pswd':pswd})
+    
     return render(req,"form.html")
 def login(req):
     return render(req,'login.html')
@@ -51,7 +57,7 @@ def logindata(req):
             # print(userdata.discription)
             pass1=userdata.password
             if password == pass1:
-                data={'name':userdata.name,'email':userdata.email,'contact':userdata.email,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription}
+                data={'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
                 return render(req,"dashboard.html",{'data':data})
             else:
                 msg= "Email and Password not matched"
@@ -64,3 +70,18 @@ def dashboard(req):
     return render(req,"dashboard.html")
 def logout(req):
     return render(req,"logout.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
