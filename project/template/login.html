@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %} 
+login page
+{% endblock %}
+
+{% block content %}
+    <h1> Login Form </h1>
+<div class="login">    
+<form action="{% url 'logindata' %}" method="POST"  enctype="multipart/form-data" >
+      {% csrf_token %}
+
+
+
+       {{alert}}
+       {{msg}}
+       <br><br>
+<label>Email:</label>
+<input type="email" name="email"><br><br>
+
+<label>Password:</label>
+<input type="text" name="password"><br><br>
+
+ <input type="submit" value="Login">
+ </div>
+</form>
+
+
+{% endblock %}
