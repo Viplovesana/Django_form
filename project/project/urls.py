@@ -30,5 +30,7 @@ urlpatterns = [
     path('logindata/', views.logindata, name='logindata'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('logout/', views.logout, name='logout'),
+    path('query/<int:pk>/',views.query,name='query'),
+    path('querydata/<int:pk>/',views.querydata,name='querydata'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

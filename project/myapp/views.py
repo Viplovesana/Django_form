@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse
-from .models import Student
+from .models import Student,Query
 # Create your views here.
 
 def home(req):
@@ -45,6 +45,7 @@ def logindata(req):
         user = Student.objects.filter(email=email)
         if user:
             userdata=Student.objects.get(email=email)
+            
             # print(userdata.name)
             # print(userdata.email)        
             # print(userdata.contact)
@@ -57,7 +58,7 @@ def logindata(req):
             # print(userdata.discription)
             pass1=userdata.password
             if password == pass1:
-                data={'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
+                data={'id':userdata.id,'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
                 return render(req,"dashboard.html",{'data':data})
             else:
                 msg= "Email and Password not matched"
@@ -71,7 +72,25 @@ def dashboard(req):
 def logout(req):
     return render(req,"logout.html")
 
+def query(req,pk):
+    userdata=Student.objects.get(id=pk)
+    data={'id':userdata.id,'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
+    return render(req,"dashboard.html",{'data':data,'query':pk})
 
+def querydata(req,pk):
+    print(req.POST)
+    print(pk)
+    name=req.POST.get('name')
+    email=req.POST.get('email')
+    query=req.POST.get('query')
+    print(name,email,query)
+    Query.objects.create(name=name,email=email,query=query)
+    userdata=Student.objects.get(id=pk)
+    data={'id':userdata.id,'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
+    return render(req,"dashboard.html",{'data':data})
+
+
+    
 
 
 

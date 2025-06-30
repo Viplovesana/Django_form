@@ -15,4 +15,7 @@ class Student(models.Model):
     file=models.FileField(upload_to='files/')
     discription=models.CharField(null=True)
   
-    
+class Query(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+    query = models.TextField()
