@@ -12,6 +12,8 @@ dashboard page
     {% csrf_token %}
     <button type="submit">Query</button>
 </form>
+
+</form>
 {% if query %}
     <form action="{% url 'querydata' pk=data.id %}" method="post">
         {% csrf_token %}
@@ -21,5 +23,57 @@ dashboard page
         <button type="submit">Submit Query</button>
     </form>
 {% endif %}
+
+<form action="{% url 'allquery' pk=data.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit">All Query</button>
+</form>
+
+
+{% if aquery %}
+
+<form action="{% url 'search' pk=data.id %}" method="POST" >
+   {% csrf_token %}
+    <input type="search" name="search">
+    <input type="submit" value="Search">
+</form>
+<table border="1">
+    <tr>
+       <th>ID no</th>
+       <th>Name</th>
+       <th>Email</th>
+       <th>Query</th>
+       <th>Edit</th>
+       <th>Delete</th>
+    </tr>
+    {% for i in aquery %}
+    <tr>
+
+        <!-- <td>{{forloop.counter}}</td> -->
+           <td>{{i.id}}</td>
+        <td>{{i.name}}</td>
+        <td>{{i.email}}</td>
+        <td>{{i.query}}</td>
+        <td><a href="{% url 'edit' id=i.id pk=data.id %}">Edit</a></td>
+        <td><a href="{% url 'delete' id=i.id pk=data.id %}">Delete</a></td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endif %}
+
+<!-----------------------------------------------------------   ----------------------------------------------------------------->
+{% if editdata %}
+    <form action="{% url 'update' id=editdata.id pk=data.id %}" method="post">
+        {% csrf_token %}
+        Name:  <input type="text" name="name" value={{editdata.name}} id="" readonly>
+        Email: <input type="email" name="email" value="{{editdata.email}}" id="" readonly>
+        Query: <input type="text" name="query"  id="">
+        <button type="submit">Update</button>
+    </form>
+{% endif %}
+
+
+
 {% endblock %}
 

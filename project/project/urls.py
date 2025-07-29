@@ -31,6 +31,11 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('logout/', views.logout, name='logout'),
     path('query/<int:pk>/',views.query,name='query'),
+    path('allquery/<int:pk>/',views.allquery,name='allquery'),
     path('querydata/<int:pk>/',views.querydata,name='querydata'),
+    path('edit/<int:id>/<int:pk>/',views.edit,name='edit'),
+    path('update/<int:id>/<int:pk>/',views.update,name='update'),
+    path('delete/<int:id>/<int:pk>/',views.delete,name='delete'),
+    path('search/<int:pk>/',views.search,name='search'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

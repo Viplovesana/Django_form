@@ -38,6 +38,7 @@ def form(req):
     return render(req,"form.html")
 def login(req):
     return render(req,'login.html')
+
 def logindata(req):
     if req.method == 'POST':
         email = req.POST.get('email')
@@ -45,20 +46,9 @@ def logindata(req):
         user = Student.objects.filter(email=email)
         if user:
             userdata=Student.objects.get(email=email)
-            
-            # print(userdata.name)
-            # print(userdata.email)        
-            # print(userdata.contact)
-            # print(userdata.dob)
-            # print(userdata.education)
-            # print(userdata.gender)
-            # print(userdata.password)
-            # print(userdata.image)
-            # print(userdata.file)
-            # print(userdata.discription)
             pass1=userdata.password
             if password == pass1:
-                data={'id':userdata.id,'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
+                data={'id':userdata.id,'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription          } 
                 return render(req,"dashboard.html",{'data':data})
             else:
                 msg= "Email and Password not matched"
@@ -74,8 +64,7 @@ def logout(req):
 
 def query(req,pk):
     userdata=Student.objects.get(id=pk)
-    data={'id':userdata.id,'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
-    return render(req,"dashboard.html",{'data':data,'query':pk})
+    return render(req,"dashboard.html",{'data':userdata,'query':pk})
 
 def querydata(req,pk):
     print(req.POST)
@@ -87,7 +76,59 @@ def querydata(req,pk):
     Query.objects.create(name=name,email=email,query=query)
     userdata=Student.objects.get(id=pk)
     data={'id':userdata.id,'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
-    return render(req,"dashboard.html",{'data':data})
+    email=data['email']
+    aquery=Query.objects.filter(email=email)
+    return render(req,"dashboard.html",{'data':data,'query':pk,'aquery':aquery})
+
+
+def allquery(req,pk):
+    userdata=Student.objects.get(id=pk)
+    email=userdata.email
+    aquery=Query.objects.filter(email=email)
+    return render(req,'dashboard.html',{'data':userdata,'aquery':aquery})
+
+def edit(req,id,pk):
+    print(id,pk)
+    editdata=Query.objects.get(id=id)
+    userdata=Student.objects.get(id=pk)
+    data={'id':userdata.id,'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
+    return render(req,'dashboard.html',{'editdata':editdata,'data':data})
+
+    
+def update(req,id,pk):
+    print("Hello........")
+    if req.method=='POST':
+        name=req.POST.get("name")
+        email=req.POST.get("email")
+        query1=req.POST.get("query")
+        olddata=Query.objects.get(id=id)
+        print(name,email,query1,olddata)
+        olddata.query=query1
+        olddata.save()
+        aquery=Query.objects.filter(email=email)
+        userdata=Student.objects.get(id=pk)
+        data={'id':userdata.id,'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
+    return render(req,'dashboard.html',{'aquery':aquery,'data':data})
+
+
+def delete(req,id,pk):
+    deletedata=Query.objects.get(id=id)
+    deletedata.delete()
+    userdata=Student.objects.get(id=pk)
+    data={'id':userdata.id,'name':userdata.name,'email':userdata.email,'contact':userdata.contact,'dob':userdata.dob,'education':userdata.education,'gender':userdata.gender,'password':userdata.password,'image':userdata.image,'file':userdata.file,'discription':userdata.discription} 
+    aquery=Query.objects.filter(email=userdata.email)
+    return render(req,'dashboard.html',{'aquery':aquery,'data':data}) 
+
+
+from django.db.models import Q
+
+def search(req,pk):
+    userdata=Student.objects.get(id=pk)
+    sdata=req.POST.get('search')
+    aquery=Query.objects.filter(Q(email=userdata.email) & Q(query__contains=sdata))
+    return render(req,'dashboard.html',{'aquery':aquery,'data':userdata}) 
+
+
 
 
     
